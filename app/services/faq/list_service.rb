@@ -8,10 +8,10 @@ module FaqModule
 		def call
 			if @action == "search"
 				faqs = Faq.search(@query)
-			elsif @action == "Search_by_hashtag"
+			elsif @action == "search_by_hashtag"
 				faqs = []
 				Faq.all.each do |faq| 
-					faq.hashtags.each do |hashtags| 
+					faq.hashtags.each do |hashtag| 
 						faqs << faq if hashtag.name == @query
 					end
 				end
@@ -19,15 +19,16 @@ module FaqModule
 				faqs = Faq.all 
 			end
 
-			response = "*Perguntas e respostas* \n\n"
-			faqs.each do |f| 
-				response += "*#{f.id}* - "
-				response += "*#{f.question}*\n"
-				response += "*`#{f.answer}`*\n"
-				f.hashtags.each do |h|
-					response += "_##{h.name}_"
-				end
-			end
+			response = "*Perguntas e Respostas* \n\n"
+      		faqs.each do |f|
+        		response += "*#{f.id}* - "
+        		response += "*#{f.question}*\n"
+        		response += "`#{f.answer}` \n"
+        		f.hashtags.each do |h|
+          			response += "_##{h.name}_ "
+        		end
+        		response += "\n\n"
+      		end
 			(faqs.count > 0)? response : "Nada encontrado"
 		end
 	end
